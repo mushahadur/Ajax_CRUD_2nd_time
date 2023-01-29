@@ -8,21 +8,12 @@ use App\Models\Student;
 class StudentController extends Controller
 {
     public function index(){
-        return view('form');
+        
+        return view('form', ['students' => Student::orderBy('id', 'desc')->get()]);
     }
 
     public function addStudent(Request $request){
-
-        $file =  $request->file('file');
-        $fileName = time().''.$file->getClientOriginalName();
-        $filePath = $file->storAs('images',$fileName,'public');
-
-        $student = new Student;
-        $studnent->name = $request->name;
-        $studnent->email = $request->email;
-        $studnent->image = $filePath;
-        $studnent->save();
-
+        Student::newStudent($request);
 
         return response()->json(['res'=>'Student Created Successfully !']);
     }
