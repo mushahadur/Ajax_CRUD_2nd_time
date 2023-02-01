@@ -37,12 +37,12 @@
             </div>
         </section>
 </header>
-
+<span id="output"></span>
 <section>
     <div class="container">
         <h2 class="pt-3 text-center">This is All student Info</h2>
         <hr/>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover" id="student-table">
             <thead>
                 <tr>
                     <th scope="col">SI NO</th>
@@ -71,7 +71,7 @@
                             data-image = "{{ $student->image }}">
                                 <i class='fas fa-user-edit'></i>
                             </a>
-                            <a href="" class="btn btn-outline-danger" ><i class="fa fa fa-trash"></i></a>
+                            <a href="" data-id ="{{$student->id}}" class="btn btn-outline-danger deleteData" ><i class="fa fa fa-trash"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -80,10 +80,7 @@
     </div>
 </section>
 
-<!-- Edit Model Include start -->
 
-@include('edit');
-<!-- Edit Model Include End -->
 
 <!-- Model Start -->
 
@@ -127,6 +124,9 @@
 </div>
 <!-- Modal End -->
 
+<!-- Edit Model Include start -->
+@include('edit');
+<!-- Edit Model Include End -->
 
     <script src="{{asset('/')}}assets/js/bootstrap.bundle.min.js"></script>
   
@@ -163,21 +163,36 @@
                });
             });
 
-            $("#edit").on('click','.editStudenForm', function(){
-              
-                let id      = $('this').data('id');
-                let name      = $('this').data('name');
-                let email      = $('this').data('email');
-                let image      = $('this').data('image');
+            $(document).on('click','.deleteData', function(ev){
+                ev.preventDefault();
+                // alert($(this).attr("data-id"));
+                if(confirm('Are you sure delete this student !!')){
+                    var student_id = $(this).attr("data-id");
+                    var obj = this;
+                    $.ajax({
+                        type:"POST",
+                        url:"{{route('delete.Student')}}",
+                        data:{id:student_id}
+                        success:function(data){
+                            if(data = 'success'){
+                                $(obj).parent().parent().remove();
+                                $("#output").text(data.result);
+                            }
+                            else{
+                                $("#output").html("Somethis Error");
+                            }
+                        },
+                        error:function(err){
+                            console.log(err.responseText);
+                        }
+                    });
+                }
                 
-                $('#up_id').val(id);
-                $('#up_name').val(name);
-                $('#up_email').val(email);
-                $('#up_image').val(image);
-            });
-        });
+            }); 
+          
 
-       
+          
+        });
 
     </script>
    

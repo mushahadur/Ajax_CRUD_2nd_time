@@ -33,6 +33,18 @@ class Student extends Model
         self::$student->image         = self::getImageUrl($request);
         self::$student->save();
     }
+
+    public static function deleteStudent($id)
+    {
+        self::$student = Student::find($id);
+        if (file_exists(self::$student->image))
+        {
+            unlink(self::$student->image);
+        }
+        self::$student->delete();
+    }
+
+
 /*
     public static function updateBlog($request, $id)
     {
