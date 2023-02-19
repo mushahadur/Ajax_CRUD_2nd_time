@@ -9,11 +9,10 @@
 <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset('/')}}assets/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-</head>
-<body>
 
 </head>
 <body>
+
 
 <header>
         <section class="py-2" style="background-color: #A3D2BE;">
@@ -26,7 +25,7 @@
                     </div>
                     <div class="col-md-6">
                         <ul class="nav float-end" >
-                            <li class="nav-item py-2"> 
+                            <li class="nav-item py-2">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#studentModal">
                                     Add a New Student
                                 </button>
@@ -37,6 +36,7 @@
             </div>
         </section>
 </header>
+
 <span id="output"></span>
 <section>
     <div class="container">
@@ -60,18 +60,8 @@
                         <td>{{$student->email}}</td>
                         <td><img src="{{asset($student->image)}}" alt="{{$student->name}}" height="70"width="110"/></td>
                         <td>
-                            <a href="" 
-                            id="edit"
-                            class="btn btn-outline-success editStudenForm" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#editModal"
-                            data-id = "{{ $student->id }}"
-                            data-name = "{{ $student->name }}"
-                            data-email = "{{ $student->email }}"
-                            data-image = "{{ $student->image }}">
-                                <i class='fas fa-user-edit'></i>
-                            </a>
-                            <a href="" data-id ="{{$student->id}}" class="btn btn-outline-danger deleteData" ><i class="fa fa fa-trash"></i></a>
+                            <a href="" class="btn btn-outline-success"><i class='fas fa-user-edit'></i></a>
+                            <a  data-id ="{{$student->id}}" class="btn btn-outline-danger " id="deleteData" ><i class="fa fa fa-trash"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -95,7 +85,7 @@
             @csrf
             <div class="modal-body">
                 <div class="errMessContainer"></div>
-                <div class="form-group row mb-3">                                <div class="form-group row mb-3">
+                <div class="form-group row mb-3">
                     <label class="col-form-label col-md-3">Name</label>
                     <div class="col-md-9">
                         <input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" />
@@ -124,77 +114,24 @@
 </div>
 <!-- Modal End -->
 
-<!-- Edit Model Include start -->
-@include('edit');
-<!-- Edit Model Include End -->
 
     <script src="{{asset('/')}}assets/js/bootstrap.bundle.min.js"></script>
-  
+
     <script>
         $(document).ready(function(){
             $("#my-form").submit(function(event){
                 event.preventDefault();
                var form = $("#my-form")[0];
-               var data =  new FormData(form); 
+               var data =  new FormData(form);
                $("#btnSubmit").prop("disabled", true);
 
-               $.ajax({
-                    type: "POST",
-                    url:"{{route('addStudent')}}",
-                    data: data,
-                    processData:false,
-                    contentType:false,
-                    success:function(data){
-                        $("#output").text(data.res);
-                        $("#btnSubmit").prop("disabled", false);
-                        $("input[type = 'text']").val('');
-                        $("input[type = 'email']").val('');
-                        $("input[type = 'file']").val('');
-                        $("#studentModal").modal('hide');
-                        $('.table').load(location.href+' .table');
-                    },
-                    error:function(e){
-                        $("#output").text(e.responseText);
-                        $("#btnSubmit").prop("disabled", false);
-                        $("input[type = 'text']").val('');
-                        $("input[type = 'email']").val('');
-                        $("input[type = 'file']").val('');
-                    }
-               });
             });
 
-            $(document).on('click','.deleteData', function(ev){
-                ev.preventDefault();
-                // alert($(this).attr("data-id"));
-                if(confirm('Are you sure delete this student !!')){
-                    var student_id = $(this).attr("data-id");
-                    var obj = this;
-                    $.ajax({
-                        type:"POST",
-                        url:"{{route('delete.Student')}}",
-                        data:{id:student_id}
-                        success:function(data){
-                            if(data = 'success'){
-                                $(obj).parent().parent().remove();
-                                $("#output").text(data.result);
-                            }
-                            else{
-                                $("#output").html("Somethis Error");
-                            }
-                        },
-                        error:function(err){
-                            console.log(err.responseText);
-                        }
-                    });
-                }
-                
-            }); 
-          
 
-          
+
         });
 
     </script>
-   
+
 </body>
 </html>

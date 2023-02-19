@@ -10,10 +10,6 @@ class Student extends Model
     use HasFactory;
 
     private static $student, $image, $imageUrl, $imageName, $extension, $directory,$message;
-    /**
-     * @var mixed|string
-     */
-
 
     public static function getImageUrl($request)
     {

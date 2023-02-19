@@ -16,8 +16,5 @@ class StudentController extends Controller
         Student::newStudent($request);
         return response()->json(['res'=>'Student Created Successfully !']);
     }
-    public function delete($id){
-        Student::deleteStudent($id);
-        return response()->json(['result'=>'success']);
-    }
+   
 }
